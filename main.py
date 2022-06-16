@@ -9,14 +9,10 @@ from email.mime.image import MIMEImage
 import smtplib
 import os
 from email import encoders
-import errno
-import re
-import functools
-import collections
-import string
 
 
-TOKEN = '1784219747:AAEad0gIWff6xDK6xVs28P3rnErr5PAk_eY'
+
+TOKEN = '5496430241:AAHB-pvvmBwGLv8THWz1tKi2PkWWHB5qhrI'
 TOMSG = 'dogovor@abc-analitika.ru'
 bot = telebot.TeleBot(TOKEN)
 
@@ -90,7 +86,7 @@ def sendmsg(name, _id, tag):
     msg['From'] = "postbot@abc-analitika.ru"
     msg['To'] = TOMSG
     msg['Subject'] = client.content[str(_id)]['fullname']
-    filepath = f'document{_id}.docx'
+    filepath = f'Оформление_договора.docx'
     filename = os.path.basename(filepath)
     ctype, encoding = mimetypes.guess_type(filepath)
     if ctype is None or encoding is not None:
@@ -149,10 +145,10 @@ def renderdoc(_id, tag):
     response = requests.get(response.content)
     print("file downloaded")
 
-    with open(f"document{_id}.docx", "wb") as f:
+    with open(f"Оформление_договора.docx", "wb") as f:
         f.write(response.content)
     print('sending')
-    sendmsg(f"document{_id}.docx", _id, tag)
+    sendmsg(f"Оформление_договора.docx", _id, tag)
     print('sent')
 
 
