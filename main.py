@@ -11,8 +11,7 @@ import os
 from email import encoders
 
 
-
-TOKEN = '5496430241:AAHB-pvvmBwGLv8THWz1tKi2PkWWHB5qhrI'
+TOKEN = '5558260681:AAFUTFCxltCubL-lCW5KwmoNc4eZ4KPNV68'
 TOMSG = 'dogovor@abc-analitika.ru'
 bot = telebot.TeleBot(TOKEN)
 
