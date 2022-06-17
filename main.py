@@ -44,118 +44,130 @@ class Client:
         self.content[str(_id)] = self.content['0'].copy()
 
     def setcontent(self, _id, cont):
-        _id = str(_id)
-        cont = str(cont)
-        if self.content[_id]['status'] == 0:
-            self.content[_id]['fullname'] = cont
-        elif self.content[_id]['status'] == 1:
-            self.content[_id]['registration'] = cont
-        elif self.content[_id]['status'] == 2:
-            self.content[_id]['inn'] = cont
-        elif self.content[_id]['status'] == 3:
-            self.content[_id]['snils'] = cont
-        elif self.content[_id]['status'] == 4:
-            if len(cont.split()) == 2:
-                self.content[_id]['series'] = cont.split()[0]
-                self.content[_id]['number'] = cont.split()[1]
-            if len(cont.split()) == 3:
-                self.content[_id]['series'] = cont.split()[0] + cont.split()[1]
-                self.content[_id]['number'] = cont.split()[2]
-        elif self.content[_id]['status'] == 5:
-            self.content[_id]['given'] = cont
-        elif self.content[_id]['status'] == 6:
-            self.content[_id]['date'] = cont
-        elif self.content[_id]['status'] == 7:
-            self.content[_id]['codep'] = cont
-        elif self.content[_id]['status'] == 8:
-            self.content[_id]['email'] = cont
-        elif self.content[_id]['status'] == 9:
-            self.content[_id]['phonenumber'] = cont
-        elif self.content[_id]['status'] == 10:
-            self.content[_id]['cardnumber'] = cont
+        try:
+            _id = str(_id)
+            cont = str(cont)
+            if self.content[_id]['status'] == 0:
+                self.content[_id]['fullname'] = cont
+            elif self.content[_id]['status'] == 1:
+                self.content[_id]['registration'] = cont
+            elif self.content[_id]['status'] == 2:
+                self.content[_id]['inn'] = cont
+            elif self.content[_id]['status'] == 3:
+                self.content[_id]['snils'] = cont
+            elif self.content[_id]['status'] == 4:
+                if len(cont.split()) == 2:
+                    self.content[_id]['series'] = cont.split()[0]
+                    self.content[_id]['number'] = cont.split()[1]
+                if len(cont.split()) == 3:
+                    self.content[_id]['series'] = cont.split()[0] + cont.split()[1]
+                    self.content[_id]['number'] = cont.split()[2]
+            elif self.content[_id]['status'] == 5:
+                self.content[_id]['given'] = cont
+            elif self.content[_id]['status'] == 6:
+                self.content[_id]['date'] = cont
+            elif self.content[_id]['status'] == 7:
+                self.content[_id]['codep'] = cont
+            elif self.content[_id]['status'] == 8:
+                self.content[_id]['email'] = cont
+            elif self.content[_id]['status'] == 9:
+                self.content[_id]['phonenumber'] = cont
+            elif self.content[_id]['status'] == 10:
+                self.content[_id]['cardnumber'] = cont
+        except Exception as e:
+            print(e)
 
 
 client = Client()
 
 
 def sendmsg(name, _id, tag):
-    _id = str(_id)
-    msg = MIMEMultipart()
-    password = "PostBot530!"
-    msg['From'] = "postbot@abc-analitika.ru"
-    msg['To'] = TOMSG
-    msg['Subject'] = client.content[str(_id)]['fullname']
-    filepath = f'Оформление_договора.docx'
-    filename = os.path.basename(filepath)
-    ctype, encoding = mimetypes.guess_type(filepath)
-    if ctype is None or encoding is not None:
-        ctype = 'application/octet-stream'
-    maintype, subtype = ctype.split('/', 1)
-    with open(filepath, 'rb') as fp:
-        file = MIMEBase(maintype, subtype)
-        file.set_payload(fp.read())
-        encoders.encode_base64(file)
-    msg.attach(file)
-    file.add_header('Content-Disposition', 'attachment', filename=filename)
+    try:
+        _id = str(_id)
+        msg = MIMEMultipart()
+        password = "PostBot530!"
+        msg['From'] = "postbot@abc-analitika.ru"
+        msg['To'] = TOMSG
+        msg['Subject'] = client.content[str(_id)]['fullname']
+        filepath = f'Оформление_договора.docx'
+        filename = os.path.basename(filepath)
+        ctype, encoding = mimetypes.guess_type(filepath)
+        if ctype is None or encoding is not None:
+            ctype = 'application/octet-stream'
+        maintype, subtype = ctype.split('/', 1)
+        with open(filepath, 'rb') as fp:
+            file = MIMEBase(maintype, subtype)
+            file.set_payload(fp.read())
+            encoders.encode_base64(file)
+        msg.attach(file)
+        file.add_header('Content-Disposition', 'attachment', filename=filename)
 
-    filepath = f'{_id}0.jpg'
-    filename = os.path.basename(filepath)
-    ctype, encoding = mimetypes.guess_type(filepath)
-    if ctype is None or encoding is not None:
-        ctype = 'application/octet-stream'
-    maintype, subtype = ctype.split('/', 1)
-    with open(filepath, 'rb') as fp:
-        file = MIMEImage(fp.read(), _subtype=subtype)
-    msg.attach(file)
-    file.add_header('Content-Disposition', 'attachment', filename=filename)
-    filepath = f'{_id}1.jpg'
-    filename = os.path.basename(filepath)
-    ctype, encoding = mimetypes.guess_type(filepath)
-    if ctype is None or encoding is not None:
-        ctype = 'application/octet-stream'
-    maintype, subtype = ctype.split('/', 1)
-    with open(filepath, 'rb') as fp:
-        file = MIMEImage(fp.read(), _subtype=subtype)
-    msg.attach(file)
-    file.add_header('Content-Disposition', 'attachment', filename=filename)
-    msg.attach(MIMEText(f"telegram: {tag}    phone: {client.content[_id]['phonenumber']}"
-                        f"     mail: {client.content[_id]['email']}", 'plain'))
-    server = smtplib.SMTP_SSL('smtp.yandex.ru: 465')
-    print(1)
-    server.login(msg['From'], password)
-    print(2)
-    server.send_message(msg)
-    print(3)
-    server.quit()
-    pass
-
+        filepath = f'{_id}0.jpg'
+        filename = os.path.basename(filepath)
+        ctype, encoding = mimetypes.guess_type(filepath)
+        if ctype is None or encoding is not None:
+            ctype = 'application/octet-stream'
+        maintype, subtype = ctype.split('/', 1)
+        with open(filepath, 'rb') as fp:
+            file = MIMEImage(fp.read(), _subtype=subtype)
+        msg.attach(file)
+        file.add_header('Content-Disposition', 'attachment', filename=filename)
+        filepath = f'{_id}1.jpg'
+        filename = os.path.basename(filepath)
+        ctype, encoding = mimetypes.guess_type(filepath)
+        if ctype is None or encoding is not None:
+            ctype = 'application/octet-stream'
+        maintype, subtype = ctype.split('/', 1)
+        with open(filepath, 'rb') as fp:
+            file = MIMEImage(fp.read(), _subtype=subtype)
+        msg.attach(file)
+        file.add_header('Content-Disposition', 'attachment', filename=filename)
+        msg.attach(MIMEText(f"telegram: {tag}    phone: {client.content[_id]['phonenumber']}"
+                            f"     mail: {client.content[_id]['email']}", 'plain'))
+        server = smtplib.SMTP_SSL('smtp.yandex.ru: 465')
+        print(1)
+        server.login(msg['From'], password)
+        print(2)
+        server.send_message(msg)
+        print(3)
+        server.quit()
+        pass
+    except Exception as e:
+        print(e)
 
 def renderdoc(_id, tag):
-    params = ''
-    print(1)
-    for i, j in client.content.get(_id).items():
-        params += f'{i}={j}&'
-    dt = datetime.datetime.now().timetuple()
-    yr, mnth, day = str(dt[0])[2:], dt[1], dt[2]
-    params += f'yr={str(yr)}&mnth={str(mnth) if len(str(mnth)) == 2 else "0" + str(mnth)}&day={str(day)}'
-    url = ur + params
-    response = requests.get(url)
-    print("file generated")
-    response = requests.get(response.content)
-    print("file downloaded")
+    try:
+        params = ''
+        print(1)
+        for i, j in client.content.get(_id).items():
+            params += f'{i}={j}&'
+        dt = datetime.datetime.now().timetuple()
+        yr, mnth, day = str(dt[0])[2:], dt[1], dt[2]
+        params += f'yr={str(yr)}&mnth={str(mnth) if len(str(mnth)) == 2 else "0" + str(mnth)}&day={str(day)}'
+        url = ur + params
+        response = requests.get(url)
+        print("file generated")
+        response = requests.get(response.content)
+        print("file downloaded")
 
-    with open(f"Оформление_договора.docx", "wb") as f:
-        f.write(response.content)
-    print('sending')
-    sendmsg(f"Оформление_договора.docx", _id, tag)
-    print('sent')
+        with open(f"Оформление_договора.docx", "wb") as f:
+            f.write(response.content)
+        print('sending')
+        sendmsg(f"Оформление_договора.docx", _id, tag)
+        print('sent')
+    except Exception as e:
+        print(e)
 
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    print('started')
-    bot.send_message(message.chat.id, 'Здравствуйте! Введите следующие данные:\nВаше ФИО')
-    client.create(message.chat.id)
+    try:
+        print('started')
+        bot.send_message(message.chat.id, 'Здравствуйте! Введите следующие данные:\nВаше ФИО')
+        client.create(message.chat.id)
+    except Exception as e:
+        print(e)
+        bot.send_message(message.chat.id, e)
 
 
 def genmess(status):
@@ -183,14 +195,18 @@ def genmess(status):
 
 @bot.message_handler()
 def getinf(message):
-    print(message.text)
-    client.setcontent(message.chat.id, message.text)
-    _id = message.chat.id
-    client.content[str(_id)]['status'] += 1
-    if client.content[str(_id)]['status'] >= 11:
-        bot.send_message(message.chat.id, 'Отправьте фото своего паспорта (только разворот с фотографией)')
-    else:
-        bot.send_message(message.chat.id, genmess(client.content[str(_id)]['status']))
+    try:
+        print(message.text)
+        client.setcontent(message.chat.id, message.text)
+        _id = message.chat.id
+        client.content[str(_id)]['status'] += 1
+        if client.content[str(_id)]['status'] >= 11:
+            bot.send_message(message.chat.id, 'Отправьте фото своего паспорта (только разворот с фотографией)')
+        else:
+            bot.send_message(message.chat.id, genmess(client.content[str(_id)]['status']))
+    except Exception as e:
+        print(e)
+        bot.send_message(message.chat.id, e)
 
 
 @bot.message_handler(content_types=['photo'])
@@ -209,7 +225,8 @@ def handle_docs_photo(message):
                                   "В ближайшее время он с вами свяжется.")
             renderdoc(str(message.chat.id), tag=str(message.from_user.username))
     except Exception as e:
-        pass
+        print(e)
+        bot.send_message(message.chat.id, e)
 
 
 if __name__ == '__main__':
