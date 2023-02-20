@@ -85,7 +85,7 @@ def sendmsg(name, _id, tag):
     try:
         _id = str(_id)
         msg = MIMEMultipart()
-        password = "PostBot530!"
+        password = "678-Qdot&9"
         msg['From'] = "postbot@abc-analitika.ru"
         msg['To'] = TOMSG
         msg['Subject'] = client.content[str(_id)]['fullname']
@@ -124,7 +124,7 @@ def sendmsg(name, _id, tag):
         file.add_header('Content-Disposition', 'attachment', filename=filename)
         msg.attach(MIMEText(f"telegram: {tag}    phone: {client.content[_id]['phonenumber']}"
                             f"     mail: {client.content[_id]['email']}", 'plain'))
-        server = smtplib.SMTP_SSL('smtp.yandex.ru: 465')
+        server = smtplib.SMTP_SSL('smtp.beget.com: 465')
         print(1)
         server.login(msg['From'], password)
         print(2)
